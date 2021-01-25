@@ -29,7 +29,7 @@ class Tambah extends Component {
   }
   click = (v) => {
     const { angka } = this.state
-    if (v == '=') {
+    if (v === '=') {
       const hasil = angka.reduce((a, b) => a + b)
       this.props.calculate(hasil)
       console.log(hasil)
@@ -87,12 +87,12 @@ class App extends Component {
         <button onClick={() => this.select(':')}>:</button>
         <button onClick={() => this.select('x')}>x</button>
         <Hasil hasil={this.state.hasil} />
-        <br/>
-        <br/>
-        { this.state.operator == ":" && <Bagi calculate={this.calculate} />}
-        { this.state.operator == "x" && <Kali calculate={this.calculate} />}
-        { this.state.operator == "+" && <Tambah calculate={this.calculate} />}
-        { this.state.operator == "-" && <Kurang calculate={this.calculate} />}
+        <br />
+        <br />
+        { this.state.operator === ":" && <Bagi calculate={this.calculate} />}
+        { this.state.operator === "x" && <Kali calculate={this.calculate} />}
+        { this.state.operator === "+" && <Tambah calculate={this.calculate} />}
+        { this.state.operator === "-" && <Kurang calculate={this.calculate} />}
       </div>
     )
   }
