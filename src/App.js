@@ -1,100 +1,54 @@
-import { Component } from 'react'
-// import './App.css';
+import React from 'react'
+import { Button, FormControl, Modal } from 'react-bootstrap';
 
-class Hasil extends Component {
-  render() {
-    return <div>Hasil: {this.props.hasil}</div>
-  }
-}
-
-class Number extends Component {
-  render() {
-    return <div>
-      <button onClick={() => this.props.click(1)}>1</button>
-      <button onClick={() => this.props.click(2)}>2</button>
-      <button onClick={() => this.props.click(3)}>3</button><br />
-      <button onClick={() => this.props.click(4)}>4</button>
-      <button onClick={() => this.props.click(5)}>5</button>
-      <button onClick={() => this.props.click(6)}>6</button><br />
-      <button onClick={() => this.props.click(7)}>7</button>
-      <button onClick={() => this.props.click(8)}>8</button>
-      <button onClick={() => this.props.click(9)}>9</button><br />
-      <button onClick={() => this.props.click('=')}>=</button>
-    </div>
-  }
-}
-class Tambah extends Component {
+class ModalNama extends React.Component {
   state = {
-    angka: []
+    nama: this.props.nama
   }
-  click = (v) => {
-    const { angka } = this.state
-    if (v === '=') {
-      const hasil = angka.reduce((a, b) => a + b)
-      this.props.calculate(hasil)
-      console.log(hasil)
-    } else {
-      angka.push(v)
-      this.setState({ angka })
-    }
-  }
-  render() {
-    return <div>
-      Komponen Pertambahan <br />
-      {this.state.angka.join('+')}
-      <br /><Number click={this.click} />
-    </div>
-  }
-}
-class Kali extends Component {
-  render() {
-    return <div>
-      Komponen Perkalian
-    </div>
-  }
-}
-class Bagi extends Component {
-  render() {
-    return <div>
-      Komponen Pembagian
-    </div>
-  }
-}
-class Kurang extends Component {
-  render() {
-    return <div>
-      Komponen Pengurangan
-    </div>
-  }
-}
-class App extends Component {
-  state = {
-    operator: null,
-    hasil: 0
-  }
-  select = (s) => {
-    this.setState({ operator: s })
-  }
-  calculate = (hasil) => {
-    this.setState({ hasil })
+  save = () => {
+    this.props.gantiNama(this.state.nama)
+    this.props.close()
   }
   render() {
     return (
-      <div>
-        Pilih salah satu <br />
-        <button onClick={() => this.select('+')}>+</button>
-        <button onClick={() => this.select('-')}>-</button>
-        <button onClick={() => this.select(':')}>:</button>
-        <button onClick={() => this.select('x')}>x</button>
-        <Hasil hasil={this.state.hasil} />
-        <br />
-        <br />
-        { this.state.operator === ":" && <Bagi calculate={this.calculate} />}
-        { this.state.operator === "x" && <Kali calculate={this.calculate} />}
-        { this.state.operator === "+" && <Tambah calculate={this.calculate} />}
-        { this.state.operator === "-" && <Kurang calculate={this.calculate} />}
-      </div>
+      <Modal.Dialog>
+        <Modal.Header closeButton onHide={this.props.close}>
+          <Modal.Title>Modal title</Modal.Title>
+        </Modal.Header>
+
+        <Modal.Body>
+          <FormControl defaultValue={this.props.nama} onChange={(e) => this.setState({ nama: e.target.value })} />
+        </Modal.Body>
+
+        <Modal.Footer>
+          <Button variant="secondary" onClick={this.props.close}>Close</Button>
+          <Button variant="primary" onClick={this.save}>Save changes</Button>
+        </Modal.Footer>
+      </Modal.Dialog>
     )
+  }
+}
+class App extends React.Component {
+  state = {
+    nama: 'Nicole',
+    edit: false
+  }
+  gantiNama = (nama) => {
+    this.setState({ nama })
+  }
+  render() {
+    return (
+      <div className="container">
+        <h1>{this.state.nama}</h1>
+        <Button onClick={() => this.setState({ edit: true })}>Ganti Nama</Button>
+        {this.state.edit &&
+          <ModalNama
+            nama={this.state.nama}
+            gantiNama={this.gantiNama}
+            close={() => this.setState({ edit: false })}
+          />}
+      </div>
+    );
   }
 }
 
